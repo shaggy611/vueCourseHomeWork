@@ -9,6 +9,7 @@ const App = {
         {status: '', title: 'Vuex', text: 'В блоке вы узнаете абсолютно все про Vuex. Вы узнаете как работать с данными, какие есть лучшие практики по их программированию и структурированию. Все на практике.'},
         {status: '', title: 'Composition', text: 'Одним из наиболее важных обновлений в Vue 3 является появление альтернативного синтаксиса Composition API. В этом блоке вы узнаете все, чтобы полностью пользоваться данными синтаксисом на практических примерах. Помимо этого вы узнаете как работать совместно с Vue Router и Vuex.'},
       ],
+      finished: false
     }
   },
   methods: {
@@ -19,29 +20,37 @@ const App = {
     reset() {
       this.steps.map((item, index) => index === 0 ? item.status = 'active' : item.status = '')
       this.activeIndex = 0
+      this.finished = false
     },
     nextOfFinish() {
-      this.setActive(++this.activeIndex)
+      if(this.activeIndex + 1 === this.steps.length) {
+        this.steps[this.activeIndex].status = 'done'
+        this.finished = true
+      } else {this.setActive(++this.activeIndex)}
     },
     setActive(index) {
       this.activeIndex = index
-      this.steps[index].status === 'active' ? this.steps[index].status = '' : this.steps[index].status = 'active'
-      this.steps[index - 1].status = 'done'
-      this.steps[index + 1].status = ''
+      this.steps.map((item, idx) => {
+        if(idx < index) {
+          item.status = 'done'
+        }
+        else if (idx === index) {
+          item.status === 'active' ? item.status = '' : item.status = 'active'
+        }
+        else if (idx > index) {
+          item.status = ''
+        }
+      })
     }
   },
   computed: {
-    // тут стоит определить несколько свойств:
-    // 1. текущий выбранный шаг
-    // 2. выключена ли кнопка назад
-    // 3. находимся ли мы на последнем шаге
     prevButtonBlocker() {
       return this.activeIndex <= 0
     },
 
-    nextButtonBlocker() {
+    nextButtonFinishCheck() {
       return this.activeIndex === this.steps.length - 1
-    }
+    },
 
   }
 }

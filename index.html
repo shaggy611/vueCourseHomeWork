@@ -25,12 +25,12 @@
             <span>{{index + 1}}</span> {{item.title}}</li>
 
         </ul>
-        <div v-if="activeIndex <= steps.length">
-          <button class="btn" @click="prev()" :disabled="prevButtonBlocker">Назад</button>
-          <button class="btn primary" @click="nextOfFinish()" >{{nextButtonBlocker ? 'Завершить' : 'Вперед'}}</button>
+        <div v-if="finished">
+          <button class="btn" @click="reset()">Начать заново</button>
         </div>
-        <div v-else-if="nextButtonBlocker">
-          <button class="btn" @click="reset">Начать заново</button>
+        <div v-else>
+          <button class="btn" @click="prev()" :disabled="prevButtonBlocker">Назад</button>
+          <button class="btn primary" @click="nextOfFinish()" >{{nextButtonFinishCheck ? 'Завершить' : 'Вперед'}}</button>
         </div>
       </div>
     </div>
